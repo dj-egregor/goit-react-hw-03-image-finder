@@ -5,6 +5,12 @@ import css from './ImageGallery.module.css';
 import ImageGalleryItem from '../ImageGalleryItem/ImageGalleryItem';
 
 class ImageGallery extends React.Component {
+  componentDidUpdate(prevProps) {
+    if (prevProps.images.length !== this.props.images.length) {
+      window.scrollTo(0, document.body.scrollHeight);
+    }
+  }
+
   render() {
     return (
       <ul className={css.ImageGallery}>

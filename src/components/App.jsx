@@ -39,15 +39,9 @@ class App extends React.Component {
   handleSearch = searchValue => {
     if (searchValue !== '') {
       if (searchValue !== this.state.query) {
-        this.setState({ query: searchValue, page: 1, images: [] }, () => {
-          this.makeApiCall(this.state.query, this.state.page);
-        });
+        this.setState({ query: searchValue, page: 1, images: [] });
       } else {
-        this.setState({ query: searchValue }, () => {
-          if (this.state.query) {
-            this.makeApiCall(this.state.query, this.state.page);
-          }
-        });
+        this.setState({ query: searchValue }, () => {});
       }
     }
   };
@@ -82,16 +76,9 @@ class App extends React.Component {
   };
 
   fetchMoreImages = () => {
-    this.setState(
-      prevState => {
-        return { page: (prevState.page += 1) };
-      },
-      () => {
-        const { query } = this.state;
-
-        this.handleSearch(query);
-      }
-    );
+    this.setState(prevState => {
+      return { page: (prevState.page += 1) };
+    });
   };
 
   getImagesFromUrl(searchUrl) {
@@ -99,6 +86,15 @@ class App extends React.Component {
       const totalPages = Math.round(response.data.totalHits / 12);
       this.setState({ totalPages, images: response.data.hits });
     });
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (
+      prevState.query !== this.state.query ||
+      prevState.page !== this.state.page
+    ) {
+      this.makeApiCall(this.state.query, this.state.page);
+    }
   }
 
   render() {

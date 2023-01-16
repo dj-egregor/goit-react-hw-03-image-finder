@@ -77,7 +77,7 @@ class App extends React.Component {
 
   fetchMoreImages = () => {
     this.setState(prevState => {
-      return { page: (prevState.page += 1) };
+      return { page: prevState.page + 1 };
     });
   };
 
